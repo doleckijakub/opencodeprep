@@ -12,7 +12,7 @@ else
 	$(error Unsupported platform: $(shell uname))
 endif
 
-all: opencodeprep
+all: ocp
 
-opencodeprep: main.cpp
-	$(CPP) $(CPPFLAGS) -o opencodeprep main.cpp $(LDFLAGS)
+ocp: main.cpp
+	$(CPP) $(CPPFLAGS) -o ocp main.cpp $(LDFLAGS)
