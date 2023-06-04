@@ -31,7 +31,7 @@ $ ocp help
 
 ## Key Features
 
-[] Extensive Offline Coding Practice: Practice coding problems, algorithms, and data structures even without an internet connection, ensuring uninterrupted learning and preparation in your own.
-[] Open Source Contributions: Contribute to the growth of the platform by [sharing your own coding exercises](https://github.com/doleckijakub/opencodeprep-exercises) solutions, insights, and resources.
-[] Community-Driven Learning: Engage with a supportive community of learners and experienced programmers. Share solutions, ask questions and learn from a diverse range of perspectives.
-[] Personalized Learning Paths: Tailor your learning experience to your specific needs. Set goals, track your progress, and receive personalized recommendations to optimize your preparation journey.
+- [ ] Extensive Offline Coding Practice: Practice coding problems, algorithms, and data structures even without an internet connection, ensuring uninterrupted learning and preparation in your own.
+- [ ] Open Source Contributions: Contribute to the growth of the platform by [sharing your own coding exercises](https://github.com/doleckijakub/opencodeprep-exercises) solutions, insights, and resources.
+- [ ] Community-Driven Learning: Engage with a supportive community of learners and experienced programmers. Share solutions, ask questions and learn from a diverse range of perspectives.
+- [ ] Personalized Learning Paths: Tailor your learning experience to your specific needs. Set goals, track your progress, and receive personalized recommendations to optimize your preparation journey.
