@@ -17,5 +17,11 @@ endif
 
 all: $(EXEC)
 
-$(EXEC): *.cpp *.hpp
-	$(CPP) $(CPPFLAGS) -o $(EXEC) main.cpp $(LDFLAGS)
+os.o: os.hpp os.cpp
+	$(CPP) -c $(CPPFLAGS) -o os.o os.cpp
+
+exercises.o: exercises.hpp exercises.cpp
+	$(CPP) -c $(CPPFLAGS) -o exercises.o exercises.cpp
+
+$(EXEC): *.cpp *.hpp os.o exercises.o
+	$(CPP) $(CPPFLAGS) -o $(EXEC) os.o exercises.o main.cpp $(LDFLAGS)

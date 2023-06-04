@@ -1,4 +1,5 @@
 #include "os.hpp"
+#include "exercises.hpp"
 
 #include <iostream>
 #include <cassert>
@@ -7,27 +8,6 @@
 
 namespace ocp
 {
-	void error(const char *format, ...)
-	{
-		std::cerr << "error: ";
-		va_list va;
-		va_start(va, format);
-		std::vfprintf(stderr, format, va);
-		va_end(va);
-		std::cerr << std::endl;
-	}
-
-	void panic(const char *format, ...)
-	{
-		std::cerr << "error: ";
-		va_list va;
-		va_start(va, format);
-		std::vfprintf(stderr, format, va);
-		va_end(va);
-		std::cerr << std::endl;
-		exit(1);
-	}
-
 	enum class Option : uint32_t
 	{
 		NONE = 0,
@@ -47,7 +27,7 @@ namespace ocp
 		auto next_usage = [&]() -> std::ostream &
 		{
 			static bool already_called = false;
-			sink << (already_called ? "       " : "Usage: ") << program_name << " ";
+			sink << (already_called ? "   or: " : "usage: ") << program_name << " ";
 			already_called = true;
 			return sink;
 		};
@@ -66,7 +46,7 @@ namespace ocp
 			next_usage() << "exercises help                  - prints this message" << std::endl;
 		if (option & Option::EXERCISES)
 		{
-			next_usage() << "exercises pull                  - pulls the exercise list from https://github.com/doleckijakub/opencodeprep-exercises to " << ocp::exercises_path.string() << std::endl;
+			next_usage() << "exercises pull                  - pulls the exercise list from " OCP_EXERCISES_REPO_LINK " to " << ocp::exercises_path.string() << std::endl;
 			next_usage() << "exercises list                  - lists exercises from " << std::endl;
 		}
 	}
@@ -139,7 +119,7 @@ int main(int argc, const char **argv)
 		}
 		else
 		{
-			ocp::panic("bad option: '%s'", arg.c_str());
+			ocp::panic("unknown subcommand: '%s'", arg.c_str());
 		}
 	}
 	else if (arg == "exercises")
@@ -158,20 +138,20 @@ int main(int argc, const char **argv)
 		}
 		else if (arg == "pull")
 		{
-			OCP_UNIMPLEMENTED;
+			ocp::exercises::pull();
 		}
 		else if (arg == "list")
 		{
-			OCP_UNIMPLEMENTED;
+			ocp::exercises::list();
 		}
 		else
 		{
-			ocp::panic("bad option: '%s'", arg.c_str());
+			ocp::panic("unknown subcommand: '%s'", arg.c_str());
 		}
 	}
 	else
 	{
-		ocp::error("bad option: '%s'", arg.c_str());
+		ocp::error("unknown subcommand: '%s'", arg.c_str());
 		ocp::usage(program_name, std::cerr);
 		return 1;
 	}
