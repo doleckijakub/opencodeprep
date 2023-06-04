@@ -1,10 +1,10 @@
 #include "os.hpp"
-#include "exercises.hpp"
+#include "subcommand_exercises.hpp"
 
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
-#include <cstdarg>
+#include <string>
 
 namespace ocp
 {
@@ -32,22 +32,34 @@ namespace ocp
 			return sink;
 		};
 
+		// auto next_option = [&]() -> std::ostream &
+		// {
+		// 	static std::string spaces = std::string(7, ' ');
+		// 	sink << spaces;
+		// 	return sink;
+		// };
+
 		if (option & Option::HELP)
-			next_usage() << "help                            - prints this message" << std::endl;
+			next_usage() << "help                              - prints this message" << std::endl;
 		if (option == Option::EXERCISE)
-			next_usage() << "exercise help                   - prints this message" << std::endl;
+			next_usage() << "exercise help                     - prints this message" << std::endl;
 		if (option & Option::EXERCISE)
 		{
-			next_usage() << "exercise start <exercise name>  - sets up the environment for a given exercise" << std::endl;
-			next_usage() << "exercise run                    - compiles/interprets your code, runs it and checks validity with testcases" << std::endl;
-			next_usage() << "exercise submit                 - same as run but with more testcases" << std::endl;
+			next_usage() << "exercise attempt <exercise name>  - sets up the environment for a given exercise" << std::endl;
+			next_usage() << "exercise run                      - compiles/interprets your code, runs it and checks validity with testcases" << std::endl;
+			next_usage() << "exercise submit                   - same as run but with more testcases" << std::endl;
 		}
 		if (option == Option::EXERCISES)
-			next_usage() << "exercises help                  - prints this message" << std::endl;
+			next_usage() << "exercises help                    - prints this message" << std::endl;
 		if (option & Option::EXERCISES)
 		{
-			next_usage() << "exercises pull                  - pulls the exercise list from " OCP_EXERCISES_REPO_LINK " to " << ocp::exercises_path.string() << std::endl;
-			next_usage() << "exercises list                  - lists exercises from " << std::endl;
+			next_usage() << "exercises pull                    - updates the exercise list" << std::endl;
+			next_usage() << "exercises list                    - lists downloaded exercises" << std::endl;
+			// next_usage() << "exercises list [options]          - lists downloaded exercises" << std::endl;
+			// next_option() << "options:" << std::endl;
+			// exercises::ListOptions list_options;
+			// next_option() << "--results-per-page <number>  - changes the amount of results visible at once, default = " << list_options.results_per_page << std::endl;
+			// next_option() << "--page <number>              - changes the page number, default = " << list_options.page << std::endl;
 		}
 	}
 }
@@ -69,12 +81,19 @@ int main(int argc, const char **argv)
 		bool git_installed = std::system("git version" OCP_PIPE_ALL_TO_NULL) == 0;
 
 		if (!git_installed)
-			ocp::panic("git is not installed, but is a necessary prerequisite. Check https://github.com/git-guides/install-git for an installation guide.");
+			ocp::panic("git is not installed, but is a necessary prerequisite. Install it to continue.");
+	}
+
+	{
+		bool make_installed = std::system("make --version" OCP_PIPE_ALL_TO_NULL) == 0;
+
+		if (!make_installed)
+			ocp::panic("GNU Make is not installed, but is a necessary prerequisite. Install it to continue.");
 	}
 
 	if (!argc)
 	{
-		ocp::error("missing options");
+		ocp::error("missing subcommand");
 		ocp::usage(program_name, std::cerr);
 		return 1;
 	}
@@ -99,7 +118,7 @@ int main(int argc, const char **argv)
 		{
 			ocp::usage(program_name, std::cerr, ocp::Option::EXERCISE);
 		}
-		else if (arg == "start")
+		else if (arg == "attempt")
 		{
 			if (!argc)
 			{
@@ -126,7 +145,7 @@ int main(int argc, const char **argv)
 	{
 		if (!argc)
 		{
-			ocp::error("missing options");
+			ocp::error("missing subcommand");
 			ocp::usage(program_name, std::cerr, ocp::Option::EXERCISES);
 			return 1;
 		}
@@ -142,7 +161,56 @@ int main(int argc, const char **argv)
 		}
 		else if (arg == "list")
 		{
-			ocp::exercises::list();
+			// ocp::exercises::ListOptions options;
+			// while (argc)
+			// {
+			// 	std::string arg = next_arg();
+			// 	if (arg == "--results-per-page")
+			// 	{
+			// 		if (!argc)
+			// 		{
+			// 			ocp::panic("missing number after '%s'", arg.c_str());
+			// 		}
+			// 		std::string num = next_arg();
+			// 		try
+			// 		{
+			// 			options.results_per_page = std::stoi(num);
+			// 		}
+			// 		catch (std::invalid_argument const &e)
+			// 		{
+			// 			ocp::panic("not a number '%s'", arg.c_str());
+			// 		}
+			// 		catch (std::out_of_range const &e)
+			// 		{
+			// 			ocp::panic("integer overflow, number '%s', is too big", arg.c_str());
+			// 		}
+			// 	}
+			// 	else if (arg == "--page")
+			// 	{
+			// 		if (!argc)
+			// 		{
+			// 			ocp::panic("missing number after '%s'", arg.c_str());
+			// 		}
+			// 		std::string num = next_arg();
+			// 		try
+			// 		{
+			// 			options.page = std::stoi(num);
+			// 		}
+			// 		catch (std::invalid_argument const &e)
+			// 		{
+			// 			ocp::panic("not a number '%s'", arg.c_str());
+			// 		}
+			// 		catch (std::out_of_range const &e)
+			// 		{
+			// 			ocp::panic("integer overflow, number '%s', is too big", arg.c_str());
+			// 		}
+			// 	}
+			// 	else
+			// 	{
+			// 		ocp::panic("unknown subcommand: '%s'", arg.c_str());
+			// 	}
+			// }
+			ocp::exercises::list(/* options */);
 		}
 		else
 		{

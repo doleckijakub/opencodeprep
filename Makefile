@@ -6,7 +6,6 @@ EXEC := ocp
 
 ifeq ($(OS),Windows_NT)
 	WINDOWS := 1
-	EXEC := ocp.exe
 else ifeq ($(shell uname),Linux)
 	LINUX := 1
 else ifeq ($(shell uname),Darwin)
@@ -14,14 +13,25 @@ else ifeq ($(shell uname),Darwin)
 else
 	$(error Unsupported platform: $(shell uname))
 endif
+ifeq ($(WINDOWS),1)
+	EXEC := ocp.exe
+else ifeq ($(LINUX),1)
+else ifeq ($(MACOS),1)
+	CPPFLAGS := -std=c++17
+else
+	$(error unreachable)
+endif
 
 all: $(EXEC)
 
 os.o: os.hpp os.cpp
 	$(CPP) -c $(CPPFLAGS) -o os.o os.cpp
 
-exercises.o: exercises.hpp exercises.cpp
-	$(CPP) -c $(CPPFLAGS) -o exercises.o exercises.cpp
+subcommand_exercises.o: subcommand_exercises.hpp subcommand_exercises.cpp
+	$(CPP) -c $(CPPFLAGS) -o subcommand_exercises.o subcommand_exercises.cpp
 
-$(EXEC): *.cpp *.hpp os.o exercises.o
-	$(CPP) $(CPPFLAGS) -o $(EXEC) os.o exercises.o main.cpp $(LDFLAGS)
+exercise.o: exercise.hpp exercise.cpp
+	$(CPP) -c $(CPPFLAGS) -o exercise.o exercise.cpp
+
+$(EXEC): *.cpp *.hpp os.o exercise.o subcommand_exercises.o
+	$(CPP) $(CPPFLAGS) -o $(EXEC) os.o exercise.o subcommand_exercises.o main.cpp $(LDFLAGS)

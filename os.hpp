@@ -17,6 +17,8 @@
 #define OCP_TEMP_PATH fs::path(getenv("TEMP"))
 #endif
 
+#define OCP_LOG(x) std::cerr << __FILE__ << ":" << __LINE__ << ": " #x " = " << (x) << std::endl;
+
 #define OCP_EXERCISES_REPO_LINK "https://github.com/doleckijakub/opencodeprep-exercises"
 
 #define OCP_UNIMPLEMENTED                                                           \
